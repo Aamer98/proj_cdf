@@ -63,41 +63,6 @@ def finetune(novel_loader, n_query = 15, pretrained_dataset='miniImageNet', free
         model_path = './from_baseline_resnet18_MiniImageNet_to_EuroSAT.pth'
         pretrained_model.load_state_dict(torch.load(model_path, map_location='cuda:0'))
 
-
-        print('/////// Final Layer Reset ////////')
-        i = 0
-        for layer in pretrained_model.modules():
-            i += 1
-            if i>61:
-                if hasattr(layer, 'reset_parameters'):
-                    print(layer)
-                    layer.reset_parameters()
-                    print("layer reset")
-        print(i)
-
-
-
-        ct = 0
-        for child in pretrained_model.children():
-            ct += 1
-            if ct < 9:
-                print(child)
-    
-                if ct !=8:
-                    print(child)
-                    for param in child.parameters():
-                        param.requires_grad = False
-    
-                else:
-                    for sub_child in child.children():
-                        print(sub_child)
-                        for param in child.parameters():
-                            param.requires_grad = False
-                        break
-
-
-        print(ct)
-
         pretrained_model.fc = Identity()
         ###############################################################################################
 
