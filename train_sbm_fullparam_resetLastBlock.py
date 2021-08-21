@@ -184,7 +184,7 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
 
 if __name__=='__main__':
     
-    seed_ = 10
+    seed_ = 2021
     np.random.seed(seed_)
     torch.manual_seed(seed_)
     cudnn.deterministic = True
