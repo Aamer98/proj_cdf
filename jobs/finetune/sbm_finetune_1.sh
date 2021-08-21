@@ -40,7 +40,7 @@ unzip -q $SLURM_TMPDIR/CDFSL_Datasets/miniImagenet.zip
 mkdir EuroSAT
 
 cd EuroSAT
-unzip ~/scratch/CDFSL_Datasets/EuroSAT.zip
+unzip -q $SLURM_TMPDIR/CDFSL_Datasets/EuroSAT.zip
 cd ..
 
 
@@ -55,7 +55,11 @@ cd $SLURM_TMPDIR
 cd proj_cdf
 echo "********************************************************************************************"
 
-python baseline_eurosat_bms_finetune.py --model ResNet10 --method baseline --n_shot 50 --freeze_backbonewait
+python baseline_eurosat_bms_finetune.py --model ResNet10 --method baseline --n_shot 50 --freeze_backbone
+
+
+
+wait
 
 echo "-----------------------------------<End of run the program>---------------------------------"
 date +"%T"
