@@ -1,12 +1,12 @@
 save_dir                    = '/content/logs/'
 
-miniImageNet_path           	= '/content/miniImagenet'
+miniImageNet_path           	= './data/miniImagenet'
 DTD_path 						= '/content/dtd/images/'
 
-ISIC_path = "/ssd/data/ISIC"
-ChestX_path = "/ssd/data/chestX"
-CropDisease_path = "/ssd/data/CropDiseases"
-EuroSAT_path = "/content/2750"
+ISIC_path = "./data/ISIC2018"
+ChestX_path = "./data/ChestX-Ray8"
+CropDisease_path = "./data/CropDiseases"
+EuroSAT_path = "./data/EuroSAT/2750"
 
 EuroSAT_unlabelled_path = '/content/eurosat_unlabel'
 
