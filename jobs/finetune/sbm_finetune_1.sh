@@ -17,7 +17,7 @@
 nvidia-smi
 
 module load python
-source ~/py37ls/bin/activate
+source ~/py37/bin/activate
 
 
 echo "------------------------------------< Data preparation>----------------------------------"

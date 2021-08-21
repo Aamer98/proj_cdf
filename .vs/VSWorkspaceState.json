@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\jobs",
+    "\\jobs\\finetune"
   ],
+  "SelectedNode": "\\jobs\\finetune\\sbm_finetune_1.sh",
   "PreviewInSolutionExplorer": false
 }
