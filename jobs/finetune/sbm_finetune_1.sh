@@ -35,7 +35,7 @@ echo "creating data directories"
 date +"%T"
 cd proj_cdf
 cd data
-unzip -q $SLURM_TMPDIR/CDFSL_Datasets/miniImagenet.zip?dl=0
+unzip -q $SLURM_TMPDIR/CDFSL_Datasets/miniImagenet.zip
 
 mkdir EuroSAT
 
