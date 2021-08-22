@@ -59,7 +59,7 @@ def finetune(novel_loader, n_query = 15, pretrained_dataset='miniImageNet', free
         cudnn.deterministic = True
         ###############################################################################################
         # load pretrained model on miniImageNet
-        pretrained_model = torchvision.models.resnet18(pretrained = True)
+        pretrained_model = torchvision.models.resnet18(pretrained = False)
         model_path = './from_baseline_resnet18_MiniImageNet_to_EuroSAT.pth'
         pretrained_model.load_state_dict(torch.load(model_path, map_location='cuda:0'))
 
