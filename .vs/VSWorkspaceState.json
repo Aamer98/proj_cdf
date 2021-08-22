@@ -4,6 +4,6 @@
     "\\jobs",
     "\\jobs\\finetune"
   ],
-  "SelectedNode": "\\jobs\\finetune\\sbm_finetune_1.sh",
+  "SelectedNode": "\\train_sbm_fullparam_resetLastBlock.py",
   "PreviewInSolutionExplorer": false
 }

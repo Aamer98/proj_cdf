@@ -74,7 +74,7 @@ def shift_affine(source_stat, model):
             shift_value = (target_mean - source_mean)
             total_shift += torch.sum(shift_value)
             # shift bias
-            layer.bias = nn.Parameter((torch.rand(len(source_mean)).cuda() * shift_value.cuda()).cuda() + layer.bias).cuda()
+            layer.bias = nn.Parameter((torch.rand(len(source_mean)).to(device) * shift_value.to(device)).to(device) + layer.bias).to(device)
             i += 1
     return total_shift, model
 
@@ -100,7 +100,13 @@ def reset_last_block(model):
 
 
 def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ): 
-
+    
+    if torch.cuda.is_available():
+        dev = "cuda:0"
+    else:
+        dev = "cpu"
+    print(dev)
+    device = torch.device(dev)
     ###############################################################################################
     # load pretrained model on miniImageNet
     save_dir = './logs/'    
@@ -111,7 +117,7 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
 
 
     model.fc = nn.Linear(512, 64)
-    model.cuda()
+    model.to(device)
     model.train()
     #classifier.cuda()
 
@@ -132,8 +138,8 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
 
         for i, (images, labels) in enumerate(base_loader):
             
-            source_images = Variable(images.cuda())
-            source_labels = Variable(labels.cuda())
+            source_images = Variable(images.to(device))
+            source_labels = Variable(labels.to(device))
 
             optimizer.zero_grad()
 
@@ -146,7 +152,7 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
             ###############################################
             
             target_batch, _ = next(iter(target_loader))
-            target_batch = Variable(target_batch.cuda())
+            target_batch = Variable(target_batch.to(device))
 
             target_output = model(target_batch)
             total_shift, model = shift_affine(source_stat, model)
@@ -192,6 +198,7 @@ if __name__=='__main__':
     ##################################################################
     epochs = 200
     image_size = 224
+    
     #mini_imagenet_path = '/content/miniImagenet/'
     base_loader = miniImageNet_few_shot.get_data_loader(configs.miniImageNet_path, batch_size = 16)
 
