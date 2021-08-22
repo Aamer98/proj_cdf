@@ -104,7 +104,8 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
     ###############################################################################################
     # load pretrained model on miniImageNet
     save_dir = './logs/'    
-    model = torchvision.models.resnet18(pretrained = True)
+    model = torchvision.models.resnet18(pretrained = False)
+    model.load_state_dict(torch.load('./logs/resnet18_imgnet.tar'))
 
     model = reset_last_block(model)
 
@@ -178,7 +179,7 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
         print("epoch: {}/{}".format(epoch, num_epochs))
         if (epoch % 10==0):
             #utfile = os.path.join(params.checkpoint_dir, '{:d}.tar'.format(epoch))
-            torch.save(model, save_dir + '{}_epoch{}_train_sbm_fullparam_resetLastBlock.tar'.format(target_name, epoch))
+            torch.save(model.state_dict(), save_dir + '{}_epoch{}_train_sbm_fullparam_resetLastBlock.tar'.format(target_name, epoch))
 
 
 
