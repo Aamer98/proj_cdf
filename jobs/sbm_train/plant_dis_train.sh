@@ -61,7 +61,7 @@ cd proj_cdf
 echo "********************************************************************************************"
 
 
-python train_sbm_fullparam_resetLastBlock.py
+python plantdis_train_sbm_fullparam.py
 
 
 wait
