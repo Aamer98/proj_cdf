@@ -205,8 +205,8 @@ if __name__=='__main__':
 
     ##################################################################
     pretrained_dataset = "miniImageNet"
-
-    dataset_names = [ "Plant_diseases
+   
+   #dataset_names = ["Plant_diseases"]
     unlabelled_loaders = []
 
     #print ("Loading ISIC")
@@ -230,7 +230,7 @@ if __name__=='__main__':
     
     #########################################################################
     for idx, novel_loader in enumerate(unlabelled_loaders):
-        print (dataset_names[idx])
+        #print (dataset_names[idx])
 
         unlabelled_loader = unlabelled_loaders[idx]
         
