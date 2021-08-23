@@ -109,7 +109,7 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
     device = torch.device(dev)
     ###############################################################################################
     # load pretrained model on miniImageNet
-    save_dir = './logs/'    
+    save_dir = './logs/plant_disease/'
     model = torchvision.models.resnet18(pretrained = False)
     model.load_state_dict(torch.load('./logs/resnet18_imgnet.tar'))
 
@@ -183,7 +183,7 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
             print("Epoch{}__batch{}".format(epoch, num_batches))
   
         print("epoch: {}/{}".format(epoch, num_epochs))
-        if (epoch % 10==0):
+        if (epoch % 1==0):
             #utfile = os.path.join(params.checkpoint_dir, '{:d}.tar'.format(epoch))
             torch.save(model.state_dict(), save_dir + '{}_epoch{}_train_sbm_fullparam_resetLastBlock.pth'.format(target_name, epoch))
 
@@ -196,7 +196,7 @@ if __name__=='__main__':
     torch.manual_seed(seed_)
     cudnn.deterministic = True
     ##################################################################
-    epochs = 400
+    epochs = 4
     image_size = 224
     
     #mini_imagenet_path = '/content/miniImagenet/'
@@ -206,23 +206,22 @@ if __name__=='__main__':
     ##################################################################
     pretrained_dataset = "miniImageNet"
 
-    dataset_names = [ "EuroSAT"]
+    dataset_names = [ "Plant_diseases
     unlabelled_loaders = []
 
     #print ("Loading ISIC")
     #datamgr             =  ISIC_few_shot.SetDataManager(image_size, n_eposide = iter_num, n_query = 15, **few_shot_params)
     #novel_loader        = datamgr.get_data_loader(aug =False)
     #novel_loaders.append(novel_loader)
-    
-    print ("Loading EuroSAT")
+     
+    #print ("Loading EuroSAT")
     #unlabelled_path = '/content/eurosat_unlabel'
-    unlabelled_loader = miniImageNet_few_shot.unlabelled_loader(configs.EuroSAT_unlabelled_path, batch_size = 16)
-    unlabelled_loaders.append(unlabelled_loader)
+    #unlabelled_loader = miniImageNet_few_shot.unlabelled_loader(configs.EuroSAT_unlabelled_path, batch_size = 16)
+    #unlabelled_loaders.append(unlabelled_loader)
     
-    #print ("Loading CropDisease")
-    #datamgr             =  CropDisease_few_shot.SetDataManager(image_size, n_eposide = iter_num, n_query = 15, **few_shot_params)
-    #novel_loader        = datamgr.get_data_loader(aug =False)
-    #novel_loaders.append(novel_loader)
+    print ("Loading CropDisease")
+    unlabelled_loader = miniImageNet_few_shot.unlabelled_loader(configs.CropDisease_unlabelled_path, batch_size = 16)
+    unlabelled_loaders.append(unlabelled_loader)
     
     #print ("Loading ChestX")
     #datamgr             =  Chest_few_shot.SetDataManager(image_size, n_eposide = iter_num, n_query = 15, **few_shot_params)

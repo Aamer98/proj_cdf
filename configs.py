@@ -9,6 +9,7 @@ CropDisease_path = "./data/CropDiseases"
 EuroSAT_path = "./data/EuroSAT/2750"
 
 EuroSAT_unlabelled_path = './data/eurosat_unlabel'
+CropDisease_unlabelled_path = './data/plant_disease_unlaballed'
 
 
 num_epochs = 200
