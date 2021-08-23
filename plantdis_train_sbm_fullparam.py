@@ -102,7 +102,7 @@ def reset_last_block(model):
 def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ): 
     
     if torch.cuda.is_available():
-        dev = "cuda:0"
+        dev = "cuda"
     else:
         dev = "cpu"
     print(dev)
@@ -138,8 +138,8 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
 
         for i, (images, labels) in enumerate(base_loader):
             
-            source_images = Variable(images.to(device))
-            source_labels = Variable(labels.to(device))
+            source_images = Variable(images.to(cuda))
+            source_labels = Variable(labels.to(cuda))
 
             optimizer.zero_grad()
 
@@ -152,7 +152,7 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
             ###############################################
             
             target_batch, _ = next(iter(target_loader))
-            target_batch = Variable(target_batch.to(device))
+            target_batch = Variable(target_batch.to(cuda))
 
             target_output = model(target_batch)
             total_shift, model = shift_affine(source_stat, model)
