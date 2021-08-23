@@ -56,13 +56,13 @@ cd proj_cdf
 echo "********************************************************************************************"
 
 echo "1-shot"
-python finetune_lr0.01_30.py --model ResNet10 --method baseline --n_shot 1 --freeze_backbone 
+python finetune_lr0.01_100.py --model ResNet10 --method baseline --n_shot 1 --freeze_backbone 
 echo "5-shot"
-python finetune_lr0.01_30.py --model ResNet10 --method baseline --n_shot 5 --freeze_backbone 
+python finetune_lr0.01_100.py --model ResNet10 --method baseline --n_shot 5 --freeze_backbone 
 echo "20-shot"
-python finetune_lr0.01_30.py --model ResNet10 --method baseline --n_shot 20 --freeze_backbone 
+python finetune_lr0.01_100.py --model ResNet10 --method baseline --n_shot 20 --freeze_backbone 
 echo "50-shot"
-python finetune_lr0.01_30.py --model ResNet10 --method baseline --n_shot 50 --freeze_backbone 
+python finetune_lr0.01_100.py --model ResNet10 --method baseline --n_shot 50 --freeze_backbone 
 
 
 wait
