@@ -1,9 +1,7 @@
 {
   "ExpandedNodes": [
     "",
-    "\\jobs",
-    "\\jobs\\finetune"
+    "\\logs"
   ],
-  "SelectedNode": "\\train_sbm_fullparam_resetLastBlock.py",
   "PreviewInSolutionExplorer": false
 }

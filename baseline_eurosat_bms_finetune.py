@@ -51,7 +51,7 @@ def finetune(novel_loader, n_query = 15, pretrained_dataset='miniImageNet', free
         dev = "cuda:0"
     else:
         dev = "cpu"
-    device = torch.device(dev)
+    cuda = torch.device(dev)
 
     acc_all = []
 
