@@ -205,8 +205,7 @@ if __name__=='__main__':
 
     ##################################################################
     pretrained_dataset = "miniImageNet"
-   
-   #dataset_names = ["Plant_diseases"]
+    dataset_names = ["Plant_diseases"]
     unlabelled_loaders = []
 
     #print ("Loading ISIC")
