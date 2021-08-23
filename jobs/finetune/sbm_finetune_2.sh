@@ -11,7 +11,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --ntasks-per-node=32
 #SBATCH --mem=127000M
-#SBATCH --time=0-00:30
+#SBATCH --time=0-05:00
 #SBATCH --account=rrg-ebrahimi
 
 nvidia-smi
@@ -55,8 +55,14 @@ cd $SLURM_TMPDIR
 cd proj_cdf
 echo "********************************************************************************************"
 
-python baseline_eurosat_bms_finetune.py --model ResNet10 --method baseline --n_shot 1 --freeze_backbone
-
+echo "1-shot"
+python finetune_200.py --model ResNet10 --method baseline --n_shot 1 --freeze_backbone 
+echo "5-shot"
+python finetune_200.py --model ResNet10 --method baseline --n_shot 5 --freeze_backbone 
+echo "20-shot"
+python finetune_200.py --model ResNet10 --method baseline --n_shot 20 --freeze_backbone 
+echo "50-shot"
+python finetune_200.py --model ResNet10 --method baseline --n_shot 50 --freeze_backbone 
 
 
 wait
