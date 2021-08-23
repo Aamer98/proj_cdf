@@ -76,20 +76,20 @@ def finetune(novel_loader, n_query = 15, pretrained_dataset='miniImageNet', free
 
         ###############################################################################################
         n_query = x.size(1) - n_support
-        x = x.to(device)
+        x = x.to(device = cuda)
         x_var = Variable(x)
 
     
         batch_size = 4
         support_size = n_way * n_support 
        
-        y_a_i = Variable( torch.from_numpy( np.repeat(range( n_way ), n_support ) )).to(device) # (25,)
+        y_a_i = Variable( torch.from_numpy( np.repeat(range( n_way ), n_support ) )).to(device = cuda) # (25,)
 
         x_b_i = x_var[:, n_support:,:,:,:].contiguous().view( n_way* n_query,   *x.size()[2:]) 
         x_a_i = x_var[:,:n_support,:,:,:].contiguous().view( n_way* n_support, *x.size()[2:]) # (25, 3, 224, 224)
 
          ###############################################################################################
-        loss_fn = nn.CrossEntropyLoss().to(device)
+        loss_fn = nn.CrossEntropyLoss().to(device = cuda)
         classifier_opt = torch.optim.SGD(classifier.parameters(), lr = 0.01, momentum=0.9, dampening=0.9, weight_decay=0.001)
         
 
@@ -97,8 +97,8 @@ def finetune(novel_loader, n_query = 15, pretrained_dataset='miniImageNet', free
             delta_opt = torch.optim.SGD(filter(lambda p: p.requires_grad, pretrained_model.parameters()), lr = 0.01)
 
 
-        pretrained_model.to(device)
-        classifier.to(device)
+        pretrained_model.to(device = cuda)
+        classifier.to(device = cuda)
         ###############################################################################################
         total_epoch = 100
 
@@ -118,7 +118,7 @@ def finetune(novel_loader, n_query = 15, pretrained_dataset='miniImageNet', free
                     delta_opt.zero_grad()
 
                 #####################################
-                selected_id = torch.from_numpy( rand_id[j: min(j+batch_size, support_size)]).to(device)
+                selected_id = torch.from_numpy( rand_id[j: min(j+batch_size, support_size)]).to(device = cuda)
                
                 z_batch = x_a_i[selected_id]
                 y_batch = y_a_i[selected_id] 
@@ -139,7 +139,7 @@ def finetune(novel_loader, n_query = 15, pretrained_dataset='miniImageNet', free
         pretrained_model.eval()
         classifier.eval()
 
-        output = pretrained_model(x_b_i.to(device))
+        output = pretrained_model(x_b_i.to(device = cuda))
         scores = classifier(output)
        
         y_query = np.repeat(range( n_way ), n_query )
