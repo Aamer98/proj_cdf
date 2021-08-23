@@ -68,7 +68,7 @@ def finetune(novel_loader, n_query = 15, pretrained_dataset='miniImageNet', free
         pretrained_model.fc = nn.Linear(512, 64)
         #pretrained_model.load_state_dict(torch.load('./logs/sbm_fullparam_resetLastBlock/EuroSAT_epoch200_train_sbm_fullparam_resetLastBlock.pth'))
         model_path = './logs/sbm_fullparam_resetLastBlock_lr0.01/EuroSAT_epoch10_train_sbm_fullparam_resetLastBlock_lr0.01.pth'
-        pretrained_model.load_state_dict(torch.load(model_path, map_location='cuda:0'))
+        pretrained_model = torch.load(model_path)
 
         pretrained_model.fc = Identity()
         ###############################################################################################
