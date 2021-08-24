@@ -74,7 +74,7 @@ def shift_affine(source_stat, model):
             shift_value = (target_mean - source_mean)
             total_shift += torch.sum(shift_value)
             # shift bias
-            layer.bias = nn.Parameter((torch.rand(len(source_mean)).to(device) * shift_value.to(device)).to(device) + layer.bias).to(device)
+            layer.bias = nn.Parameter((torch.rand(len(source_mean)).to(device = cuda) * shift_value.to(device = cuda)).to(device = cuda) + layer.bias).to(device = cuda)
             i += 1
     return total_shift, model
 
@@ -102,11 +102,11 @@ def reset_last_block(model):
 def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ): 
     
     if torch.cuda.is_available():
-        dev = "cuda"
+        dev = "cuda:0"
     else:
         dev = "cpu"
     print(dev)
-    device = torch.device(dev)
+    cuda = torch.device(dev)
     ###############################################################################################
     # load pretrained model on miniImageNet
     save_dir = './logs/plant_disease/'
@@ -117,7 +117,7 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
 
 
     model.fc = nn.Linear(512, 64)
-    model.to(device)
+    model.to(device = cuda)
     model.train()
     #classifier.cuda()
 
