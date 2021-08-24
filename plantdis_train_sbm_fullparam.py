@@ -74,7 +74,7 @@ def shift_affine(source_stat, model):
             shift_value = (target_mean - source_mean)
             total_shift += torch.sum(shift_value)
             # shift bias
-            layer.bias = nn.Parameter((torch.rand(len(source_mean)).to(device = cuda) * shift_value.to(device = cuda)).to(device = cuda) + layer.bias).to(device = cuda)
+            layer.bias = nn.Parameter((torch.rand(len(source_mean)).cuda() * shift_value.cuda()).cuda() + layer.bias).cuda()
             i += 1
     return total_shift, model
 
@@ -117,7 +117,7 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
 
 
     model.fc = nn.Linear(512, 64)
-    model.to(device = cuda)
+    model.cuda()
     model.train()
     #classifier.cuda()
 
@@ -196,7 +196,7 @@ if __name__=='__main__':
     torch.manual_seed(seed_)
     cudnn.deterministic = True
     ##################################################################
-    epochs = 4
+    epochs = 200
     image_size = 224
     
     #mini_imagenet_path = '/content/miniImagenet/'
