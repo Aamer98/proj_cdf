@@ -8,7 +8,7 @@ ChestX_path = "./data/ChestX-Ray8"
 CropDisease_path = "./data/CropDiseases"
 EuroSAT_path = "./data/EuroSAT/2750"
 
-EuroSAT_unlabelled_path = './data/eurosat_unlabel'
+EuroSAT_unlabelled_path = './data/eurosat_unlabelled_dataset'
 CropDisease_unlabelled_path = './data/plant_disease_unlaballed'
 
 
