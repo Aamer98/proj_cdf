@@ -65,52 +65,27 @@ def regret_stat(source_stat, model):
     return model
 
 
-def shift_affine(self, source_stat):
+def shift_affine(source_stat, model):
+    total_shift = 0
     i = 0
-    for layer in self.model.modules():
+    for layer in model.modules():
         if isinstance(layer, nn.BatchNorm2d):
             target_mean = layer.running_mean.clone()  # source state
-            target_var = layer.running_var.clone()  # source state
+            target_var = layer.running_var.clone()
             source_mean = source_stat[i]['means']
             source_var = source_stat[i]['vars']
             shift_mean = (target_mean - source_mean)
-            # shift_var = (target_var / source_var)
             shift_var = (target_var - source_var)
+            #total_shift += torch.sum(shift_value)
             # shift bias
-            layer.bias = nn.Parameter((torch.rand(len(source_mean)).to(
-                self.device) * shift_mean.to(self.device)).to(
-                   self.device) + layer.bias).to(self.device)
-            # shift weight
-            # layer.weight = nn.Parameter((torch.rand(len(source_var)).to(
-            #     self.device) * shift_var.to(self.device)).to(
-            #         self.device) * layer.weight).to(self.device)
-            layer.weight = nn.Parameter((torch.rand(len(source_var)).to(
-                self.device) * shift_var.to(self.device)).to(
-                    self.device) + layer.weight).to(self.device)
+            layer.bias = nn.Parameter((torch.rand(len(source_mean)).cuda() * shift_mean.cuda()).cuda() + layer.bias).cuda()
+            layer.weight = nn.Parameter((torch.rand(len(source_var)).cuda() * shift_var.cuda()).cuda() + layer.weight).cuda()
             i += 1
     return model
 
 
 
 
-def reset_last_block(model):
-    last_layer_pos = -3 
-
-    #Breakdown layers into blocks
-    layers = [layer[1] for layer in model.named_children()]
-
-    last_layer = layers[last_layer_pos]
-
-    #Breakdown last layer into blocks
-    blocks = [block[1] for block in last_layer.named_children()]
-
-    #reset the last block of the last layer
-    for name, layer in blocks[-1].named_children():
-
-        if name != 'relu':
-            layer.reset_parameters()
-    
-    return(model)
 
 
 def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ): 
@@ -121,9 +96,6 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
     save_dir = './logs/sbm_both_param_1e3/plant_disease/'    
     model = torchvision.models.resnet18(pretrained = False)
     model.load_state_dict(torch.load('./logs/resnet18_imgnet.tar'))
-
-    model = reset_last_block(model)
-
 
     model.fc = nn.Linear(512, 64)
     model.cuda()
@@ -153,7 +125,6 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
             optimizer.zero_grad()
 
             source_outputs = model(source_images)
-            #source_outputs = classifier(source_outputs)
 
             source_affine = clone_BN_affine(model)
             source_stat = clone_BN_stat(model)
@@ -166,12 +137,11 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
             model.eval()
 
             target_output = model(target_batch)
-            total_shift, model = shift_affine(source_stat, model)
+            model = shift_affine(source_stat, model)
 
             ###############################################
 
             shifted_scores = model(source_images)
-            shifted_scores = classifier(shifted_scores)
             
             model.train()
 
