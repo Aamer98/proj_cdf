@@ -5,7 +5,7 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-type=REQUEUE
 #SBATCH --mail-type=ALL
-#SBATCH --job-name=eurosat_sbm_scratch_1e4.sh
+#SBATCH --job-name=plant_sbm_scratch_1e4.sh
 #SBATCH --output=%x-%j.out
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:1
@@ -46,7 +46,7 @@ cd ..
 cd $SLURM_TMPDIR
 cd proj_cdf
 cd data
-unzip -q $SLURM_TMPDIR/CDFSL_Datasets/eurosat_unlabelled_dataset.zip
+unzip -q $SLURM_TMPDIR/CDFSL_Datasets/plant_disease_unlaballed.zip
 cd ..
 
 
@@ -62,13 +62,13 @@ cd proj_cdf
 echo "********************************************************************************************"
 
 
-python train_sbm_scratch_1e4.py
+python train_plant_sbm_scratch_1e4.py
 
 
 wait
 
 echo "Copying weights"
-cp -r logs/sbm_scratch_1e4/eurosat ~/proj_cdf/logs
+cp -r logs/sbm_scratch_1e4/plant_disease/ ~/proj_cdf/logs
 
 echo "-----------------------------------<End of run the program>---------------------------------"
 date +"%T"
