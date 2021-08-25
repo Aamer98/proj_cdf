@@ -12,7 +12,7 @@ EuroSAT_unlabelled_path = './data/eurosat_unlabel'
 CropDisease_unlabelled_path = './data/plant_disease_unlaballed'
 
 
-num_epochs = 200
+num_epochs = 400
 batch_size = 16
 
 start_epoch = 0
