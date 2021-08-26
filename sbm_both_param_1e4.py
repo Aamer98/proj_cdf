@@ -65,9 +65,9 @@ def regret_stat(source_stat, model):
     return model
 
 
-def shift_affine(self, source_stat):
+def shift_affine(source_stat, cuda()):
     i = 0
-    for layer in self.model.modules():
+    for layer in model.modules():
         if isinstance(layer, nn.BatchNorm2d):
             target_mean = layer.running_mean.clone()  # source state
             target_var = layer.running_var.clone()  # source state
@@ -77,63 +77,35 @@ def shift_affine(self, source_stat):
             # shift_var = (target_var / source_var)
             shift_var = (target_var - source_var)
             # shift bias
-            layer.bias = nn.Parameter((torch.rand(len(source_mean)).to(
-                self.device) * shift_mean.to(self.device)).to(
-                   self.device) + layer.bias).to(self.device)
+            layer.bias = nn.Parameter((torch.rand(len(source_mean)).cuda() * shift_mean.cuda()).cuda() + layer.bias).cuda()
             # shift weight
             # layer.weight = nn.Parameter((torch.rand(len(source_var)).to(
             #     self.device) * shift_var.to(self.device)).to(
             #         self.device) * layer.weight).to(self.device)
-            layer.weight = nn.Parameter((torch.rand(len(source_var)).to(
-                self.device) * shift_var.to(self.device)).to(
-                    self.device) + layer.weight).to(self.device)
+            layer.weight = nn.Parameter((torch.rand(len(source_var)).cuda() * shift_var.cuda()).cuda() + layer.weight).cuda()
             i += 1
     return model
 
 
 
 
-def reset_last_block(model):
-    last_layer_pos = -3 
-
-    #Breakdown layers into blocks
-    layers = [layer[1] for layer in model.named_children()]
-
-    last_layer = layers[last_layer_pos]
-
-    #Breakdown last layer into blocks
-    blocks = [block[1] for block in last_layer.named_children()]
-
-    #reset the last block of the last layer
-    for name, layer in blocks[-1].named_children():
-
-        if name != 'relu':
-            layer.reset_parameters()
-    
-    return(model)
 
 
 def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ): 
     
-    if torch.cuda.is_available():
-        dev = "cuda:0"
-    else:
-        dev = "cpu"
-    print(dev)
-    device = torch.device(dev)
+
     ###############################################################################################
     # load pretrained model on miniImageNet
     save_dir = './logs/sbm_both_param/'    
     model = torchvision.models.resnet18(pretrained = False)
     model.load_state_dict(torch.load('./logs/resnet18_imgnet.tar'))
 
-    model = reset_last_block(model)
 
 
     model.fc = nn.Linear(512, 64)
-    model.to(device)
+    model.cuda()
     model.train()
-    #classifier.cuda()
+
 
     for epoch in range(num_epochs):
         
@@ -152,13 +124,12 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
 
         for i, (images, labels) in enumerate(base_loader):
             
-            source_images = Variable(images.to(device))
-            source_labels = Variable(labels.to(device))
+            source_images = Variable(images.cuda())
+            source_labels = Variable(labels.cuda())
 
             optimizer.zero_grad()
 
             source_outputs = model(source_images)
-            #source_outputs = classifier(source_outputs)
 
             source_affine = clone_BN_affine(model)
             source_stat = clone_BN_stat(model)
@@ -166,7 +137,7 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
             ###############################################
             
             target_batch, _ = next(iter(target_loader))
-            target_batch = Variable(target_batch.to(device))
+            target_batch = Variable(target_batch.cuda())
 
             model.eval()
 
@@ -176,7 +147,6 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
             ###############################################
 
             shifted_scores = model(source_images)
-            shifted_scores = classifier(shifted_scores)
             
             model.train()
 
@@ -204,7 +174,7 @@ def sbm_finetune(source_loader, target_loader, target_name , num_epochs, ):
         print("epoch: {}/{}".format(epoch, num_epochs))
         if (epoch % 50==0):
             #utfile = os.path.join(params.checkpoint_dir, '{:d}.tar'.format(epoch))
-            torch.save(model.state_dict(), save_dir + '{}_epoch{}_train_sbm_fullparam_resetLastBlock.pth'.format(target_name, epoch))
+            torch.save(model.state_dict(), save_dir + '{}_epoch{}_train_sbm_both_param_1e4.pth'.format(target_name, epoch))
 
 
 
