@@ -1,7 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\logs"
+    "\\jobs",
+    "\\logs",
+    "\\logs\\remove_rand\\eurosat",
+    "\\logs\\remove_rand\\ISIC",
+    "\\logs\\remove_rand\\plant_disease",
+    "\\logs\\remove_rand\\xray",
+    "\\logs\\sbm_both_param_1e3",
+    "\\logs\\sbm_both_param_1e3\\eurosat",
+    "\\logs\\sbm_both_param_1e3\\plant_disease"
   ],
+  "SelectedNode": "\\sbm_both_param_1e4.py",
   "PreviewInSolutionExplorer": false
 }
